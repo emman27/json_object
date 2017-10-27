@@ -74,3 +74,5 @@ target/
 
 # Virtual Environments
 venv
+
+.pypirc
