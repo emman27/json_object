@@ -3,7 +3,7 @@ Tests for the JSONObject package
 """
 import json
 import pytest
-from .json_object import JSONObject, MissingKeyError
+from . import JSONObject, MissingKeyError
 
 
 def test_exception_subclassing():

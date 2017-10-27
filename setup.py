@@ -7,7 +7,7 @@ from setuptools import setup
 
 setup(
     name="json_obj",
-    version="0.0.1a1",
+    version="0.0.3",
     description="Safe JSON decoding to objects in Python",
     author="Emmanuel Goh",
     author_email="emmanuel.goh.7@gmail.com",
