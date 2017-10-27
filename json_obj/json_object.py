@@ -54,10 +54,10 @@ class JSONObject(object):
 
     def _load_dict(self, unparsed):
         for key, value in self.schema.items():
-            try:
-                unparsed[key] = value(unparsed[key])
-            except KeyError as keyerror:
+            if unparsed.get(key) is None:
                 if self.strict:
-                    raise MissingKeyError(keyerror)
-                unparsed[key] = value(False)
+                    raise MissingKeyError("Key %s is missing" % key)
+                unparsed[key] = value()
+            else:
+                unparsed[key] = value(unparsed.get(key))
         return unparsed

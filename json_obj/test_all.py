@@ -75,3 +75,18 @@ def test_type_casting_int():
         'my_bool_key': 1,
         'my_float_key': 1
     }
+
+
+def test_zero_casting():
+    schema = JSONObject({
+        'my_key': str,
+        'my_int_key': int,
+        'my_bool_key': bool,
+        'my_float_key': float
+    })
+    assert schema.loads(json.dumps({})) == {
+        'my_key': '',
+        'my_int_key': 0,
+        'my_bool_key': False,
+        'my_float_key': 0.0
+    }
