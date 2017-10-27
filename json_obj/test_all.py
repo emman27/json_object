@@ -90,3 +90,30 @@ def test_zero_casting():
         'my_bool_key': False,
         'my_float_key': 0.0
     }
+
+
+def test_nested_dic():
+    schema = JSONObject({
+        'dict_key': {
+            'a': str,
+            'second_dict': {
+                'b': int,
+                'c': list
+            }
+        }
+    })
+    assert schema.loads(json.dumps({})) == {
+        'dict_key': {
+            'a': '',
+            'second_dict': {
+                'b': 0,
+                'c': []
+            }
+        }
+    }
+
+
+def test_strict_mode():
+    schema = JSONObject({'a': str}, strict=True)
+    with pytest.raises(MissingKeyError):
+        schema.loads({})

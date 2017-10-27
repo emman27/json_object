@@ -36,16 +36,18 @@ class JSONObject(object):
         """
         Parses a JSON string into the object.
 
-        :param json_data (str): The JSON string to parse.
-        :returns dict|list: Returns the same type as the schema given
-        :raises MissingKeyError: If in strict mode and a key is missing. If not, the key is set to the default 0-equivalent value
+        :param json_data (str|dict|list): The JSON string to parse.
+        :returns (dict|list): Returns the same type as the schema given
+        :raises MissingKeyError: If in strict mode and a key is missing.
+            If not, the key is set to the default 0-equivalent value
         """
-        unparsed = json.loads(json_data)
+        if isinstance(json_data, str):
+            json_data = json.loads(json_data)
 
         parsed = {
             True: self._load_list,
             False: self._load_dict
-        }[isinstance(self.schema, list)](unparsed)
+        }[isinstance(self.schema, list)](json_data)
 
         return parsed
 
@@ -54,7 +56,17 @@ class JSONObject(object):
 
     def _load_dict(self, unparsed):
         for key, value in self.schema.items():
-            if unparsed.get(key) is None:
+            if isinstance(value, dict) or isinstance(value, list):
+                unparsed[key] = JSONObject(
+                    value,
+                    strict=self.strict
+                ).loads(
+                    unparsed.get(
+                        key,
+                        type(value)()
+                    )
+                )
+            elif unparsed.get(key) is None:
                 if self.strict:
                     raise MissingKeyError("Key %s is missing" % key)
                 unparsed[key] = value()
