@@ -117,3 +117,19 @@ def test_strict_mode():
     schema = JSONObject({'a': str}, strict=True)
     with pytest.raises(MissingKeyError):
         schema.loads({})
+
+
+def test_lists():
+    schema = JSONObject([{'key': str}])
+    dat = schema.loads([
+        {'key': 1},
+        {},
+        {'key': 'a'},
+        {'key': False}
+    ])
+    assert dat == [
+        {'key': '1'},
+        {'key': ''},
+        {'key': 'a'},
+        {'key': 'False'}
+    ]

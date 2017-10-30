@@ -52,7 +52,8 @@ class JSONObject(object):
         return parsed
 
     def _load_list(self, unparsed):
-        return unparsed
+        schema = self.schema[0]
+        return [JSONObject(schema).loads(dat) for dat in unparsed]
 
     def _load_dict(self, unparsed):
         for key, value in self.schema.items():
