@@ -36,7 +36,7 @@ class JSONObject(object):
         >>> JSONObject([{'my_key': str}])
         >>> JSONObject({'my_key': str})
         """
-        if not isinstance(schema, dict) or isinstance(schema, list):
+        if not (isinstance(schema, dict) or isinstance(schema, list)):
             raise SchemaError("The Schema provided is invalid")
         self.schema = schema
         self.strict = strict
