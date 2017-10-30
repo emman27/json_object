@@ -11,6 +11,13 @@ class MissingKeyError(KeyError):
     pass
 
 
+class SchemaError(BaseException):
+    """
+    Error raised when a provided schema is incorrect
+    """
+    pass
+
+
 class JSONObject(object):
     """
     Some documentation here.
@@ -24,11 +31,13 @@ class JSONObject(object):
 
         :param schema (dict | list): A dictionary or list containing the schema
         :kwargs strict (bool): In strict mode, raises a MissingKeyError if any key is missing
+        :raises SchemaError: The Schema provided is not a valid JSON Schema
 
         >>> JSONObject([{'my_key': str}])
         >>> JSONObject({'my_key': str})
         """
-        assert isinstance(schema, dict) or isinstance(schema, list)
+        if not isinstance(schema, dict) or isinstance(schema, list):
+            raise SchemaError("The Schema provided is invalid")
         self.schema = schema
         self.strict = strict
 
