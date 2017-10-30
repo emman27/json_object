@@ -3,7 +3,7 @@ Tests for the JSONObject package
 """
 import json
 import pytest
-from . import JSONObject, MissingKeyError
+from . import JSONObject, MissingKeyError, SchemaError
 
 
 def test_exception_subclassing():
@@ -11,9 +11,9 @@ def test_exception_subclassing():
 
 
 def test_schema_generation():
-    with pytest.raises(AssertionError):
+    with pytest.raises(SchemaError):
         JSONObject('not a schema')
-    with pytest.raises(AssertionError):
+    with pytest.raises(SchemaError):
         JSONObject(1)
     JSONObject({})
     JSONObject([])
