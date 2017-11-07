@@ -2,6 +2,7 @@
 Tests for the JSONObject package
 """
 import json
+import datetime
 import pytest
 from . import JSONObject, MissingKeyError, SchemaError
 
@@ -133,3 +134,18 @@ def test_lists():
         {'key': 'a'},
         {'key': 'False'}
     ]
+
+
+def test_dates():
+    schema = JSONObject({
+        'a': datetime.datetime,
+        'b': datetime.datetime,
+    })
+    now = datetime.datetime.now()
+    dat = schema.loads({
+        'a': now.isoformat(),
+    })
+    assert dat == {
+        'a': now,
+        'b': None
+    }

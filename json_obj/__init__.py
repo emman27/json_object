@@ -2,6 +2,8 @@
 JSON Object
 """
 import json
+import datetime
+from dateutil import parser
 
 
 class MissingKeyError(KeyError):
@@ -79,7 +81,9 @@ class JSONObject(object):
             elif unparsed.get(key) is None:
                 if self.strict:
                     raise MissingKeyError("Key %s is missing" % key)
-                unparsed[key] = value()
+                unparsed[key] = None if value == datetime.datetime else value()
             else:
-                unparsed[key] = value(unparsed.get(key))
+                unparsed[key] = (parser.parse(unparsed.get(key)) if
+                                 value == datetime.datetime else
+                                 value(unparsed.get(key)))
         return unparsed
